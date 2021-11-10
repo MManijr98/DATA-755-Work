@@ -1,0 +1,123 @@
+---
+title: "Data 755 Project"
+author: "Michael Manigault"
+date: "10/25/2021"
+output: html_document
+---
+```{r}
+install.packages("descr")
+install.packages("tidyr")
+install.packages("survey")
+```
+
+```{r}
+rm(list=ls())
+gc()
+directory <-"C:/Users/mmani/Downloads/"
+setwd(directory)
+```
+
+```{r}
+library(readxl)
+rawdata<- read_xlsx("C:/Users/mmani/Downloads/Line_Chart_of_Total_Combustible_Tobacco_and_Cigarette_Consumption__2000-Present.xlsx")
+View(rawdata)
+```
+
+
+
+```{r}
+summary(rawdata)
+```
+
+
+```{r}
+rawdata$Domestic
+```
+```{r}
+rawdata$Imports
+```
+```{r}
+rawdata$Total
+```
+
+
+```{r}
+library(descr)
+freq(rawdata$Domestic)
+```
+
+```{r}
+prop.table(rawdata$Domestic)
+```
+
+```{r}
+library(lattice)
+histogram(rawdata$Domestic)
+```
+```{r}
+freq(rawdata$Imports)
+```
+
+```{r}
+prop.table(rawdata$Imports)
+```
+
+```{r}
+histogram(rawdata$Imports)
+```
+```{r}
+plot(density(rawdata$Domestic))
+```
+```{r}
+boxplot(rawdata$Domestic, main ="boxplot", ylab = "Domestic Cigrattes Consumption in the US from 2000-2020", col = 9)
+plot(rawdata$Domestic, col = 9)
+hist(rawdata$Domestic, col = 9)
+```
+
+```{r}
+boxplot(rawdata$Imports, main ="boxplot", ylab = "Imported Cigrattes Consumption in the US from 2000-2020", col = 10)
+plot(rawdata$Imports, col = 10)
+hist(rawdata$Imports, col = 10)
+```
+
+```{r}
+summary(rawdata$Domestic)
+```
+```{r}
+summary(rawdata$Imports)
+```
+
+```{r}
+library(ggplot2)
+g1 <- ggplot(data = rawdata, aes(x = Year, y = Domestic))
+g1 + geom_point()
+```
+
+```{r}
+g2 <- ggplot(data = rawdata, aes(x = Year, y = Imports))
+g2 + geom_point()
+```
+
+```{r}
+library(survey)
+```
+```{r}
+summary(rawdata.design)
+```
+
+```{r}
+svymean(~ Domestic, rawdata.design, na.rm = T)
+```
+
+```{r}
+svymean(~Imports, rawdata.design, na.rm = T)
+```
+
+```{r}
+svyquartile(~Domestic, rawdata.design,  0.25, na.rm = TRUE)
+```
+
+```{r}
+svyquantile(~Imports, rawdata.design,  0.25, na.rm = TRUE)
+```
+
